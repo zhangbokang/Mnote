@@ -16,9 +16,6 @@ import java.util.Set;
 @Data
 @Entity
 public class Tag implements Serializable {
-    /**
-     * The Id.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
