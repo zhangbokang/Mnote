@@ -4,12 +4,20 @@ import com.mycharx.mnote.entity.Doc;
 import com.mycharx.mnote.repository.DocRepository;
 import com.mycharx.mnote.service.DocService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Doc service.
+ *
+ * @author 张卜亢
+ * @date 2018.09.03 14:57:34
+ */
 @Service
+@Transactional(rollbackFor = {RuntimeException.class})
 public class DocServiceImpl implements DocService {
     @Resource
     private DocRepository docRepository;

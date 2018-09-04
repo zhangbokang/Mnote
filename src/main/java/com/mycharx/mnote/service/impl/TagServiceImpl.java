@@ -4,12 +4,20 @@ import com.mycharx.mnote.entity.Tag;
 import com.mycharx.mnote.repository.TagRepository;
 import com.mycharx.mnote.service.TagService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Tag service.
+ *
+ * @author 张卜亢
+ * @date 2018.09.03 14:57:58
+ */
 @Service
+@Transactional(rollbackFor = {RuntimeException.class})
 public class TagServiceImpl implements TagService {
     @Resource
     private TagRepository tagRepository;

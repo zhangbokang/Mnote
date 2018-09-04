@@ -37,7 +37,10 @@ dependencies {
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('mysql:mysql-connector-java')
     compileOnly('org.projectlombok:lombok')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-test')
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
+
 }
 
 task copyToLib(type: Copy) {
