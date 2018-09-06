@@ -51,7 +51,7 @@ public class Schedule {
     private Integer priority;
     /**
      * 日程状态
-     * 0结束，1开始(进行中)，2挂起
+     * -1结束，1开始(进行中)，0挂起
      */
     private Integer status;
     /**

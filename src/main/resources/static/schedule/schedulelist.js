@@ -57,13 +57,13 @@ var schedulelist = function () {
         }
         html += "&nbsp;&nbsp;&nbsp;状态：";
         switch (n.status) {
-            case 0:
+            case -1:
                 html += "<span style='color: #666666'>结束</span>";
                 break;
             case 1:
                 html += "<span style='color: #00FF00;'>开始(进行中)</span>";
                 break;
-            case 2:
+            case 0:
                 html += "<span style='color: #3399cc'>挂起</span>";
                 break;
         }
