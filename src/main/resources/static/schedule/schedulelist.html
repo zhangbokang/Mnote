@@ -68,8 +68,9 @@
 <div>
     <!--日程任务增加-->
     <div>
-        <div class="layui-form">
-            <form method="post" action="/schedule/save">
+        <div class="layui-form" id="scheduleAddForm">
+            <form>
+                <input type="hidden" name="id" id="scheduleId"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">标题</label>
                     <div class="layui-input-block">

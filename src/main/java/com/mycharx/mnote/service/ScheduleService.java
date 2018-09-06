@@ -19,15 +19,7 @@ public interface ScheduleService {
      * @param schedule the schedule
      * @return the schedule
      */
-    Schedule saveSchedule(Schedule schedule);
-
-    /**
-     * Update schedule schedule.
-     *
-     * @param schedule the schedule
-     * @return the schedule
-     */
-    Schedule updateSchedule(Schedule schedule);
+    Schedule saveOrUpdateSchedule(Schedule schedule);
 
     /**
      * Delete schedule.

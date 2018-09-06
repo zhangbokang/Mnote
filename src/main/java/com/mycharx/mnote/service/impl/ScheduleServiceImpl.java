@@ -25,14 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private ScheduleRepository scheduleRepository;
 
     @Override
-    public Schedule saveSchedule(Schedule schedule) {
-        schedule.setUpdateTime(System.currentTimeMillis());
-        schedule.setStatus(1);
-        return scheduleRepository.save(schedule);
-    }
-
-    @Override
-    public Schedule updateSchedule(Schedule schedule) {
+    public Schedule saveOrUpdateSchedule(Schedule schedule) {
         schedule.setUpdateTime(System.currentTimeMillis());
         return scheduleRepository.save(schedule);
     }

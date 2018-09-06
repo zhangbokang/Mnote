@@ -6,12 +6,14 @@ layui.use(['element', 'form', 'layer'], function () {
     //监听提交
     form.on('submit(scheduleForm)', function (data) {
         $.ajax({
-            url: "/schedule/save"
+            url: "/schedule/saveOrUpdate"
             , data: data.field
             , type: "POST"
             , dataType: "json"
             , success: function (result) {
                 schedulelist.append(result);
+                $("#scheduleAddForm form")[0].reset()
+                // scheduleId
             }
             , error: function () {
                 alert("保存失败");
@@ -22,7 +24,7 @@ layui.use(['element', 'form', 'layer'], function () {
     });
 });
 var schedulelist = function () {
-    var loadschedulelist = function () {
+    var init = function () {
         $.ajax({
             url: "/schedule/findPageSchedule"
             , data: {"page": 0, "size": 10}
@@ -31,7 +33,7 @@ var schedulelist = function () {
             , success: function (result) {
                 $("#schedulelist").empty();
                 $.map(result.content, function (n) {
-                    genHtml(n)
+                    append(n)
                 });
             }
             , error: function () {
@@ -39,11 +41,11 @@ var schedulelist = function () {
             }
         });
     };
-    var genHtml = function (n) {
+    var append = function (n) {
         var html = "<div class=\"layui-colla-item\">\n" +
             "<div class=\"layui-colla-title\">\n" +
-            n.title +
-            "&nbsp;&nbsp;&nbsp;优先级：";
+            "<div style='width: 550px;display: inline-block;padding-right: 10px;'>" + n.title + "</div>" +
+            "<div style='width: 60px;display: inline;'>优先级：";
         switch (n.priority) {
             case 0:
                 html += "<span style='color: #ff5522;'>高</span>";
@@ -55,18 +57,19 @@ var schedulelist = function () {
                 html += "<span style='color: #888888;'>低</span>"
                 break;
         }
-        html += "&nbsp;&nbsp;&nbsp;状态：";
+        html += "</div><div style='width: 70px;display: inline;'>状态：";
         switch (n.status) {
             case -1:
-                html += "<span style='color: #666666'>结束</span>";
+                html += "<span style='color: #666666;'>结束</span>";
                 break;
             case 1:
                 html += "<span style='color: #00FF00;'>开始(进行中)</span>";
                 break;
             case 0:
-                html += "<span style='color: #3399cc'>挂起</span>";
+                html += "<span style='color: #3399cc;'>挂起</span>";
                 break;
         }
+        html += "</div><button style='float: right;margin: 5px 5px;' class='layui-btn layui-btn-normal layui-btn-sm' onclick='schedulelist.reEdit(" + n.id + ")'>编辑</button>";
         html += "</div>\n" +
             "<div class=\"layui-colla-content\">\n" +
             n.text + "\n" +
@@ -100,8 +103,30 @@ var schedulelist = function () {
             elem: "#schedulelist"
         });
     };
+    var reEdit = function (id, e) {
+        $.ajax({
+            url: "/schedule/findById"
+            , type: "GET"
+            , data: {id: id}
+            , dataType: "json"
+            , success: function (reselt) {
+                console.log(reselt);
+            }
+            , error: function () {
+                alert("请求编辑失败");
+            }
+        })
+        //如果提供了事件对象，则这是一个非IE浏览器
+        if (e && e.stopPropagation)
+        //因此它支持W3C的stopPropagation()方法
+            e.stopPropagation();
+        else
+        //否则，我们需要使用IE的方式来取消事件冒泡
+            window.event.cancelBubble = true;
+    };
     return {
-        init: loadschedulelist
-        , append: genHtml
+        init: init
+        , append: append
+        , reEdit: reEdit
     }
 }();

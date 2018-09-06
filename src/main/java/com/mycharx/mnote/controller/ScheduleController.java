@@ -28,25 +28,14 @@ public class ScheduleController {
     private ScheduleService scheduleService;
 
     /**
-     * Save schedule schedule.
+     * Save or update schedule schedule.
      *
      * @param schedule the schedule
      * @return the schedule
      */
-    @PostMapping("/save")
-    public Schedule saveSchedule(Schedule schedule) {
-        return scheduleService.saveSchedule(schedule);
-    }
-
-    /**
-     * Update schedule schedule.
-     *
-     * @param schedule the schedule
-     * @return the schedule
-     */
-    @PostMapping("/update")
-    public Schedule updateSchedule(Schedule schedule) {
-        return scheduleService.updateSchedule(schedule);
+    @PostMapping("/saveOrUpdate")
+    public Schedule saveOrUpdateSchedule(Schedule schedule) {
+        return scheduleService.saveOrUpdateSchedule(schedule);
     }
 
     /**
@@ -88,5 +77,16 @@ public class ScheduleController {
     public Page<Schedule> findPageScheduleByStatus(Integer page, Integer size, Integer status) {
         Pageable pageable = new PageRequest(page, size);
         return scheduleService.findPageScheduleByStatus(pageable, status);
+    }
+
+    /**
+     * Find schedule by id schedule.
+     *
+     * @param id the id
+     * @return the schedule
+     */
+    @GetMapping("/findById")
+    public Schedule findScheduleById(Long id){
+        return scheduleService.findScheduleById(id);
     }
 }
