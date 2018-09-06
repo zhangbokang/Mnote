@@ -6,6 +6,7 @@ import com.mycharx.mnote.service.ScheduleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @date 2018.09.04 18:10:53
  */
 @Service
+@Transactional(rollbackFor = RuntimeException.class)
 public class ScheduleServiceImpl implements ScheduleService {
     @Resource
     private ScheduleRepository scheduleRepository;
@@ -46,6 +48,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Schedule findScheduleById(Long id) {
         Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
         if (optionalSchedule.isPresent()) {
@@ -55,21 +58,25 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<Schedule> findSecheduleLikeTitle(String title) {
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Page<Schedule> findPageSechedule(Pageable pageable) {
         return scheduleRepository.findSchedulesByPidNull(pageable);
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Page<Schedule> findPageScheduleByPid(Pageable pageable, Long pid) {
         return scheduleRepository.findSchedulesByPid(pageable, pid);
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Page<Schedule> findPageScheduleByStatus(Pageable pageable, Integer pid) {
         return scheduleRepository.findSchedulesByStatusAndPidNull(pageable, pid);
     }
