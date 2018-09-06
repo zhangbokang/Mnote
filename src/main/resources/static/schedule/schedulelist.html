@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>日程任务列表</title>
+    <link rel="stylesheet" href="/common/layui-v2.4.3/layui/css/layui.css"/>
+    <script type="text/javascript" src="/common/layui-v2.4.3/layui/layui.js"></script>
+    <style rel="stylesheet" type="text/css">
+        .mnote-body {
+            background-color: #2b2b2b;
+            width: 900px;
+            margin: 10px auto 10px auto;
+        }
+
+        .layui-collapse {
+            border-color: #555555;
+        }
+
+        .layui-colla-content {
+            border-color: #555555;
+            color: #dddddd;
+        }
+
+        .layui-colla-item {
+            background-color: #313335;
+            border-color: #555555;
+        }
+
+        .layui-colla-title {
+            background-color: #313335;
+            border-color: #555555;
+            color: #cccccc;
+        }
+
+        .layui-card {
+            background-color: #313335;
+        }
+
+        .layui-card-header {
+            border-color: #8d8d8d;
+            color: #cccccc;
+        }
+
+        .layui-form {
+            background-color: #313335;
+        }
+
+        .layui-form-label {
+            color: #cccccc;
+        }
+
+        .layui-select-title .layui-input {
+            background-color: #313335;
+            border-color: #555555;
+            color: #cccccc;
+        }
+
+        .layui-input, .layui-textarea {
+            background-color: #313335;
+            border-color: #555555;
+            color: #ffffff;
+        }
+
+    </style>
+</head>
+<body class="mnote-body">
+<!--日程任务列表总列表-->
+<div>
+    <!--日程任务增加-->
+    <div>
+        <div class="layui-form">
+            <form method="post" action="/schedule/save">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" lay-verify="required" placeholder="" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">优先级</label>
+                        <div class="layui-input-inline">
+                            <select name="priority" lay-verify="required">
+                                <option value="">请选择优先级</option>
+                                <option value="0">高</option>
+                                <option value="1">中</option>
+                                <option value="2">低</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">进度</label>
+                        <div class="layui-input-inline">
+                            <select name="status" lay-verify="required">
+                                <option value="0">开始</option>
+                                <option value="1">结束</option>
+                                <option value="2">挂起</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">详细内容</label>
+                    <div class="layui-input-block">
+                        <textarea name="text" placeholder="" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="scheduleForm">提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="schedulelist" class="layui-collapse" lay-accordion></div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="schedulelist.js"></script>
+<script type="text/javascript">
+    schedulelist.init();
+</script>
+</body>
+</html>

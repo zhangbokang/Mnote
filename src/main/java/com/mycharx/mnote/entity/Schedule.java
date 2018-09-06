@@ -46,8 +46,7 @@ public class Schedule {
     private String text;
     /**
      * 日程优先级
-     * 0-9 0最高，9最低
-     * 0-2显示高，3-6显示中，7-9显示低
+     * 0高，1中，2低
      */
     private Integer priority;
     /**
