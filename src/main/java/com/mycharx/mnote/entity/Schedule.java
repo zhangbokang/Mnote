@@ -34,7 +34,7 @@ public class Schedule {
             fetch = FetchType.EAGER)
     @JoinColumn(name = "pid")
     @Fetch(FetchMode.SUBSELECT)
-    @OrderBy("id")
+    @OrderBy("updateTime desc")
     private Set<Schedule> chilSchedules;
     /**
      * 日程标题

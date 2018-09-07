@@ -49,6 +49,6 @@ task copyToLib(type: Copy) {
 }
 
 bootJar {
-    classifier = 'boot'  //这个相当于一个后缀，比如：docking-0.0.1-SNAPSHOT-boot.jar
+//    classifier = 'boot'  //这个相当于一个后缀，比如：docking-0.0.1-SNAPSHOT-boot.jar
     excludes = ["*.jar"]
 }

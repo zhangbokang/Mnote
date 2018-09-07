@@ -3,7 +3,26 @@ layui.use(['element', 'form', 'layer'], function () {
     var element = layui.element;
     var form = layui.form;
     var layer = layui.layer;
-    //监听提交
+    //监听子级提交
+    form.on('submit(scheduleFormCh)', function (data) {
+        $.ajax({
+            url: "/schedule/saveOrUpdate"
+            , data: data.field
+            , type: "POST"
+            , dataType: "json"
+            , success: function (result) {
+                schedulelist.appendCh(result);
+                $("#scheduleAddChForm form")[0].reset()
+                // scheduleId
+            }
+            , error: function () {
+                alert("保存失败");
+            }
+        });
+        // layer.msg(JSON.stringify(data.field));
+        return false;
+    });
+    //监听顶级提交
     form.on('submit(scheduleForm)', function (data) {
         $.ajax({
             url: "/schedule/saveOrUpdate"
@@ -41,8 +60,13 @@ var schedulelist = function () {
             }
         });
     };
+    var appendCh = function (n) {
+        var html = "<div class='scheduleListChList'>" + n.text + "</div>";
+        $("#schedulelist #list_" + n.pid + " .chList").prepend(html);
+    }
     var append = function (n) {
-        var html = "<div class=\"layui-colla-item\">\n" +
+        $(".layui-colla-item#list_" + n.id).remove();
+        var html = "<div id='list_" + n.id + "' class=\"layui-colla-item\">\n" +
             "<div class=\"layui-colla-title\">\n" +
             "<div style='width: 550px;display: inline-block;padding-right: 10px;'>" + n.title + "</div>" +
             "<div style='width: 60px;display: inline;'>优先级：";
@@ -72,33 +96,36 @@ var schedulelist = function () {
         html += "</div><button style='float: right;margin: 5px 5px;' class='layui-btn layui-btn-normal layui-btn-sm' onclick='schedulelist.reEdit(" + n.id + ")'>编辑</button>";
         html += "</div>\n" +
             "<div class=\"layui-colla-content\">\n" +
-            n.text + "\n" +
-            "<div style=\"border: 1px solid #555555;padding: 0 5px 0 5px;\">\n";
+            n.text + "\n";
+
+        html += "<div class=\"layui-form\" id=\"scheduleAddChForm\">\n" +
+            "        <form>\n" +
+            "            <input type=\"hidden\" name=\"pid\" value='" + n.id + "'/>\n" +
+            "            <div class=\"layui-form-item layui-form-text\">\n" +
+            "                <label class=\"layui-form-label\">内容</label>\n" +
+            "                <div class=\"layui-input-block\">\n" +
+            "                    <textarea name=\"text\" lay-verify=\"required\" placeholder=\"\" class=\"layui-textarea\"></textarea>\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "            <div class=\"layui-form-item\">\n" +
+            "                <div class=\"layui-input-block\">\n" +
+            "                    <button class=\"layui-btn\" lay-submit=\"\" lay-filter=\"scheduleFormCh\">提交</button>\n" +
+            "                    <button type=\"reset\" class=\"layui-btn layui-btn-primary\">重置</button>\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "        </form>\n" +
+            "    </div>";
+
+        html += "<div class='chList' style=\"border: 1px solid #555555;padding: 0 5px 0 5px;\">\n";
         $.map(n.chilSchedules, function (cn) {
-            html += "<div class=\"layui-card\">\n" +
-                "<div class=\"layui-card-header\">" + cn.title +
-                "&nbsp;&nbsp;&nbsp;优先级：";
-            switch (cn.priority) {
-                case 0:
-                    html += "<span style='color: #ff5522;'>高</span>";
-                    break;
-                case 1:
-                    html += "<span style='color: #ff9900;'>中</span>";
-                    break;
-                case 2:
-                    html += "<span style='color: #888888;'>低</span>"
-                    break;
-            }
-            html += "</div>\n" +
-                "<div class=\"layui-card-body\">\n" +
+            html += "<div class=\"scheduleListChList\">\n" +
                 "" + cn.text + "\n" +
-                "</div>\n" +
                 "</div>\n";
         });
         html += "</div>\n" +
             "</div>\n" +
             "</div>";
-        $("#schedulelist").append(html);
+        $("#schedulelist").prepend(html);
         layui.element.render({
             elem: "#schedulelist"
         });
@@ -110,12 +137,18 @@ var schedulelist = function () {
             , data: {id: id}
             , dataType: "json"
             , success: function (reselt) {
-                console.log(reselt);
+                $("#scheduleAddForm [name='id']").val(reselt.id);
+                $("#scheduleAddForm [name='title']").val(reselt.title);
+                $("#scheduleAddForm [name='text']").text(reselt.text);
+                $("#scheduleAddForm [name='priority']").val(reselt.priority);
+                $("#scheduleAddForm [name='status']").val(reselt.status);
+                ////更新全部渲染
+                layui.form.render();
             }
             , error: function () {
                 alert("请求编辑失败");
             }
-        })
+        });
         //如果提供了事件对象，则这是一个非IE浏览器
         if (e && e.stopPropagation)
         //因此它支持W3C的stopPropagation()方法
@@ -127,6 +160,7 @@ var schedulelist = function () {
     return {
         init: init
         , append: append
+        , appendCh: appendCh
         , reEdit: reEdit
     }
 }();
