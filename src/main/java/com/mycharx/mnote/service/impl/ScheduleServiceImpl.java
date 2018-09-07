@@ -3,6 +3,7 @@ package com.mycharx.mnote.service.impl;
 import com.mycharx.mnote.entity.Schedule;
 import com.mycharx.mnote.repository.ScheduleRepository;
 import com.mycharx.mnote.service.ScheduleService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule saveOrUpdateSchedule(Schedule schedule) {
         schedule.setUpdateTime(System.currentTimeMillis());
-        return scheduleRepository.save(schedule);
+        Schedule s;
+        if (schedule.getId() != null){
+            s = findScheduleById(schedule.getId());
+            BeanUtils.copyProperties(schedule,s,"id","chilSchedules");
+        }else {
+            s = schedule;
+        }
+        return scheduleRepository.save(s);
     }
 
     @Override
@@ -59,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Page<Schedule> findPageSechedule(Pageable pageable) {
-        return scheduleRepository.findSchedulesByPidNull(pageable);
+        return scheduleRepository.findSchedulesByPidNullOrderByStatusAscPriorityDesc(pageable);
     }
 
     @Override
