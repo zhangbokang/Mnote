@@ -44,8 +44,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void deleteScheduleById(Long id) {
-        scheduleRepository.deleteById(id);
+    public Schedule endScheduleById(Long id) {
+        Schedule s = findScheduleById(id);
+        s.setStatus(-1);
+        s.setUpdateTime(System.currentTimeMillis());
+        return saveOrUpdateSchedule(s);
     }
 
     @Override
@@ -67,7 +70,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Page<Schedule> findPageSechedule(Pageable pageable) {
-        return scheduleRepository.findSchedulesByPidNullOrderByStatusAscPriorityDesc(pageable);
+        return scheduleRepository.findSchedulesByPidNullOrderByStatusDescPriorityAscUpdateTimeDesc(pageable);
     }
 
     @Override

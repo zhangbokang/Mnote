@@ -30,7 +30,7 @@ layui.use(['element', 'form', 'layer'], function () {
             , type: "POST"
             , dataType: "json"
             , success: function (result) {
-                schedulelist.append(result);
+                schedulelist.prepend(result);
                 $("#scheduleAddForm form")[0].reset()
                 // scheduleId
             }
@@ -43,10 +43,13 @@ layui.use(['element', 'form', 'layer'], function () {
     });
 });
 var schedulelist = function () {
-    var init = function () {
+    /**
+     * 初始化主节点列表
+     */
+    var init = function (page, size) {
         $.ajax({
             url: "/schedule/findPageSchedule"
-            , data: {"page": 0, "size": 10}
+            , data: {"page": page, "size": size}
             , type: "get"
             , dataType: "json"
             , success: function (result) {
@@ -60,11 +63,20 @@ var schedulelist = function () {
             }
         });
     };
+    /**
+     * 向前追加子节点
+     * @param n
+     */
     var appendCh = function (n) {
         var html = "<div class='scheduleListChList'>" + n.text + "</div>";
         $("#schedulelist #list_" + n.pid + " .chList").prepend(html);
-    }
-    var append = function (n) {
+    };
+    /**
+     * 生成主节点所有html代码，并移除要添加的节点同ID的节点
+     * @param n
+     * @returns {string}
+     */
+    var genHtml = function (n) {
         $(".layui-colla-item#list_" + n.id).remove();
         var html = "<div id='list_" + n.id + "' class=\"layui-colla-item\">\n" +
             "<div class=\"layui-colla-title\">\n" +
@@ -87,13 +99,16 @@ var schedulelist = function () {
                 html += "<span style='color: #666666;'>结束</span>";
                 break;
             case 1:
-                html += "<span style='color: #00FF00;'>开始(进行中)</span>";
+                html += "<span style='color: #00FF00;'>开始</span>";
                 break;
             case 0:
                 html += "<span style='color: #3399cc;'>挂起</span>";
                 break;
         }
-        html += "</div><button style='float: right;margin: 5px 5px;' class='layui-btn layui-btn-normal layui-btn-sm' onclick='schedulelist.reEdit(" + n.id + ")'>编辑</button>";
+        html += "</div>&nbsp;&nbsp;&nbsp;&nbsp;<button style='margin: 5px 5px;' class='layui-btn layui-btn-normal layui-btn-sm' onclick='schedulelist.reEdit(" + n.id + ")'>编辑</button>";
+        if (n.status != -1) {
+            html += "<button style='margin: 5px 5px;' class='layui-btn layui-btn-warm layui-btn-sm' onclick='schedulelist.theEnd(" + n.id + ")'>结束</button>";
+        }
         html += "</div>\n" +
             "<div class=\"layui-colla-content\">\n" +
             n.text + "\n";
@@ -125,11 +140,33 @@ var schedulelist = function () {
         html += "</div>\n" +
             "</div>\n" +
             "</div>";
-        $("#schedulelist").prepend(html);
+        return html;
+    };
+    /**
+     * 向后追加主节点
+     * @param n
+     */
+    var append = function (n) {
+        $("#schedulelist").append(genHtml(n));
         layui.element.render({
             elem: "#schedulelist"
         });
     };
+    /**
+     * 向前追加主节点
+     * @param n
+     */
+    var prepend = function (n) {
+        $("#schedulelist").prepend(genHtml(n));
+        layui.element.render({
+            elem: "#schedulelist"
+        });
+    }
+    /**
+     * 重新编辑主节点回填方法
+     * @param id
+     * @param e
+     */
     var reEdit = function (id, e) {
         $.ajax({
             url: "/schedule/findById"
@@ -157,10 +194,31 @@ var schedulelist = function () {
         //否则，我们需要使用IE的方式来取消事件冒泡
             window.event.cancelBubble = true;
     };
+
+    /**
+     * 根据ID删除主节点
+     * @param id
+     */
+    var theEnd = function (id) {
+        $.ajax({
+            url: "/schedule/endById"
+            , type: "GET"
+            , data: {id: id}
+            , dataType: "json"
+            , success: function (result) {
+                prepend(result);
+            }
+            , error: function () {
+                alert("结束失败");
+            }
+        })
+    };
     return {
         init: init
         , append: append
+        , prepend: prepend
         , appendCh: appendCh
         , reEdit: reEdit
+        , theEnd: theEnd
     }
 }();

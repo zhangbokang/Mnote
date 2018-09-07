@@ -39,10 +39,12 @@ public class Schedule {
     /**
      * 日程标题
      */
+    @Column(length = 300)
     private String title;
     /**
      * 日程内容
      */
+    @Column(length = 3000)
     private String text;
     /**
      * 日程优先级

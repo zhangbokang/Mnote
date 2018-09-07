@@ -29,11 +29,11 @@ public interface ScheduleService {
     void deleteSchedule(Schedule schedule);
 
     /**
-     * Delete schedule by id.
+     * End schedule by id.
      *
      * @param id the id
      */
-    void deleteScheduleById(Long id);
+    Schedule endScheduleById(Long id);
 
     /**
      * Find schedule by id schedule.

@@ -86,7 +86,18 @@ public class ScheduleController {
      * @return the schedule
      */
     @GetMapping("/findById")
-    public Schedule findScheduleById(Long id){
+    public Schedule findScheduleById(Long id) {
         return scheduleService.findScheduleById(id);
+    }
+
+    /**
+     * End by id long.
+     *
+     * @param id the id
+     * @return the long
+     */
+    @GetMapping("/endById")
+    public Schedule deleteById(Long id) {
+        return scheduleService.endScheduleById(id);
     }
 }

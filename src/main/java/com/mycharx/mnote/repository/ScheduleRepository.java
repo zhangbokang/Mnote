@@ -18,7 +18,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
      * @param pageable the pageable
      * @return the page
      */
-    Page<Schedule> findSchedulesByPidNullOrderByStatusAscPriorityDesc(Pageable pageable);
+    Page<Schedule> findSchedulesByPidNullOrderByStatusDescPriorityAscUpdateTimeDesc(Pageable pageable);
 
     /**
      * Find schedules by pid page.
