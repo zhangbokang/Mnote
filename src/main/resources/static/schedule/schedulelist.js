@@ -80,7 +80,8 @@ var schedulelist = function () {
         $(".layui-colla-item#list_" + n.id).remove();
         var html = "<div id='list_" + n.id + "' class=\"layui-colla-item\">\n" +
             "<div class=\"layui-colla-title\">\n" +
-            "<div style='width: 550px;display: inline-block;padding-right: 10px;'>" + n.title + "</div>" +
+            "<div style='width: 150px;display: inline-block;padding-right: 10px;'>" + dateTimeUtil.format(n.updateTime) + "</div>" +
+            "<div style='width: 600px;display: inline-block;padding-right: 10px;'>" + n.title + "</div>" +
             "<div style='width: 60px;display: inline;'>优先级：";
         switch (n.priority) {
             case 0:

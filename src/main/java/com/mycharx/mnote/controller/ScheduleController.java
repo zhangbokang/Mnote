@@ -2,6 +2,8 @@ package com.mycharx.mnote.controller;
 
 import com.mycharx.mnote.entity.Schedule;
 import com.mycharx.mnote.service.ScheduleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
+    Logger logger = LoggerFactory.getLogger(ScheduleController.class);
     /**
      * The Schedule service.
      */
