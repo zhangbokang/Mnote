@@ -29,11 +29,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     public Schedule saveOrUpdateSchedule(Schedule schedule) {
         schedule.setUpdateTime(System.currentTimeMillis());
         Schedule s;
-        if (schedule.getId() != null){
+        if (schedule.getId() != null) {
             s = findScheduleById(schedule.getId());
-            BeanUtils.copyProperties(schedule,s,"id","chilSchedules");
-        }else {
+            BeanUtils.copyProperties(schedule, s, "id", "chilSchedules");
+        } else {
             s = schedule;
+        }
+        if (s.getPid() != null) {
+            Schedule ps = findScheduleById(s.getPid());
+            ps.setUpdateTime(System.currentTimeMillis());
+            scheduleRepository.save(ps);
         }
         return scheduleRepository.save(s);
     }
