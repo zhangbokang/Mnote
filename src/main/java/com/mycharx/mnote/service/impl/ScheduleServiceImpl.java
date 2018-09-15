@@ -3,6 +3,8 @@ package com.mycharx.mnote.service.impl;
 import com.mycharx.mnote.entity.Schedule;
 import com.mycharx.mnote.repository.ScheduleRepository;
 import com.mycharx.mnote.service.ScheduleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional(rollbackFor = RuntimeException.class)
 public class ScheduleServiceImpl implements ScheduleService {
+    private static final Logger logger = LoggerFactory.getLogger(ScheduleServiceImpl.class);
     @Resource
     private ScheduleRepository scheduleRepository;
 
@@ -88,5 +92,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Page<Schedule> findPageScheduleByStatus(Pageable pageable, Integer pid) {
         return scheduleRepository.findSchedulesByStatusAndPidNull(pageable, pid);
+    }
+
+    @Override
+    public Page<Schedule> findPageScheduleByUpdateTime(Pageable pageable, String startDate, String endDate) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Long startUpdateTime = simpleDateFormat.parse(startDate).getTime();
+            Long endUpdateTime = simpleDateFormat.parse(endDate).getTime() + 86400000;
+            return scheduleRepository.findSchedulesByPidIsNullAndUpdateTimeGreaterThanEqualAndUpdateTimeLessThanOrderByStatusDescPriorityAscUpdateTimeDesc(pageable, startUpdateTime, endUpdateTime);
+        } catch (Exception e) {
+            logger.warn("根据日期范围查询失败", e);
+            throw new RuntimeException("根据范围查询失败");
+        }
     }
 }

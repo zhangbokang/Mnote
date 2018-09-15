@@ -17,6 +17,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
      *
      * @param pageable the pageable
      * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:48:39
      */
     Page<Schedule> findSchedulesByPidNullOrderByStatusDescPriorityAscUpdateTimeDesc(Pageable pageable);
 
@@ -26,6 +28,8 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
      * @param pageable the pageable
      * @param pid      the pid
      * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:48:40
      */
     Page<Schedule> findSchedulesByPid(Pageable pageable, Long pid);
 
@@ -35,6 +39,20 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
      * @param pageable the pageable
      * @param status   the status
      * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:48:40
      */
     Page<Schedule> findSchedulesByStatusAndPidNull(Pageable pageable, Integer status);
+
+    /**
+     * Find schedules by update time greater than and update time less than equal page.
+     *
+     * @param pageable        the pageable
+     * @param startUpdateTime the start update time
+     * @param endUpdateTime   the end update time
+     * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:48:40
+     */
+    Page<Schedule> findSchedulesByPidIsNullAndUpdateTimeGreaterThanEqualAndUpdateTimeLessThanOrderByStatusDescPriorityAscUpdateTimeDesc(Pageable pageable, Long startUpdateTime, Long endUpdateTime);
 }

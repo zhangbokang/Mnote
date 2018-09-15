@@ -1,6 +1,7 @@
 package com.mycharx.mnote.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -13,7 +14,8 @@ import java.util.Set;
  * @author 张卜亢
  * @date 2018.09.03 14:49:16
  */
-@Data
+@Getter
+@Setter
 @Entity
 public class Schedule {
     /**

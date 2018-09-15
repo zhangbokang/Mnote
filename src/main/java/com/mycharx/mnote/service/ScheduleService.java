@@ -18,6 +18,8 @@ public interface ScheduleService {
      *
      * @param schedule the schedule
      * @return the schedule
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     Schedule saveOrUpdateSchedule(Schedule schedule);
 
@@ -25,6 +27,8 @@ public interface ScheduleService {
      * Delete schedule.
      *
      * @param schedule the schedule
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     void deleteSchedule(Schedule schedule);
 
@@ -32,6 +36,9 @@ public interface ScheduleService {
      * End schedule by id.
      *
      * @param id the id
+     * @return the schedule
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     Schedule endScheduleById(Long id);
 
@@ -40,6 +47,8 @@ public interface ScheduleService {
      *
      * @param id the id
      * @return the schedule
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     Schedule findScheduleById(Long id);
 
@@ -48,6 +57,8 @@ public interface ScheduleService {
      *
      * @param title the title
      * @return the list
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     List<Schedule> findSecheduleLikeTitle(String title);
 
@@ -56,6 +67,8 @@ public interface ScheduleService {
      *
      * @param pageable the pageable
      * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     Page<Schedule> findPageSechedule(Pageable pageable);
 
@@ -65,6 +78,8 @@ public interface ScheduleService {
      * @param pageable the pageable
      * @param pid      the pid
      * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     Page<Schedule> findPageScheduleByPid(Pageable pageable, Long pid);
 
@@ -74,6 +89,20 @@ public interface ScheduleService {
      * @param pageable the pageable
      * @param pid      the pid
      * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
      */
     Page<Schedule> findPageScheduleByStatus(Pageable pageable, Integer pid);
+
+    /**
+     * Find page schedule by update time page.
+     *
+     * @param pageable  the pageable
+     * @param startTime the start time
+     * @param endTime   the end time
+     * @return the page
+     * @author 张卜亢
+     * @date 2018.09.14 21:39:43
+     */
+    Page<Schedule> findPageScheduleByUpdateTime(Pageable pageable, String startTime, String endTime);
 }

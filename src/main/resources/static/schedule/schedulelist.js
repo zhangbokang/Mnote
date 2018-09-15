@@ -1,8 +1,39 @@
 //注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
-layui.use(['element', 'form', 'layer'], function () {
+layui.use(['element', 'form', 'layer', 'laydate'], function () {
     var element = layui.element;
     var form = layui.form;
     var layer = layui.layer;
+    var laydate = layui.laydate;
+    //增加日期框
+    laydate.render({
+        elem: '#rangeDate' //指定元素
+        , range: true
+        , value: dateTimeUtil.formatDate({st: new Date().getTime()}) +
+            " - " + dateTimeUtil.formatDate({st: new Date().getTime()})
+    });
+    //监听条件查询提交
+    form.on('submit(scheduleFormTerm)', function (data) {
+        var rangeDate = data.field.rangeDate.split(" - ");
+        var startDate = rangeDate[0];
+        var endDate = rangeDate[1];
+        $.ajax({
+            url: "/schedule/findPageScheduleByUpdateTime"
+            , data: {startDate: startDate, endDate: endDate}
+            , type: "POST"
+            , dataType: "json"
+            , success: function (result) {
+                $("#schedulelist").empty();
+                $.map(result.content, function (n) {
+                    schedulelist.append(n)
+                });
+            }
+            , error: function () {
+                alert("查询失败");
+            }
+        });
+        // layer.msg(JSON.stringify(data.field));
+        return false;
+    });
     //监听子级提交
     form.on('submit(scheduleFormCh)', function (data) {
         $.ajax({
@@ -80,7 +111,7 @@ var schedulelist = function () {
         $(".layui-colla-item#list_" + n.id).remove();
         var html = "<div id='list_" + n.id + "' class=\"layui-colla-item\">\n" +
             "<div class=\"layui-colla-title\">\n" +
-            "<div style='width: 150px;display: inline-block;padding-right: 10px;'>" + dateTimeUtil.format({st:n.updateTime}) + "</div>" +
+            "<div style='width: 150px;display: inline-block;padding-right: 10px;'>" + dateTimeUtil.formatDateTime({st: n.updateTime}) + "</div>" +
             "<div style='width: 600px;display: inline-block;padding-right: 10px;'>" + n.title + "</div>" +
             "<div style='width: 60px;display: inline;'>优先级：";
         switch (n.priority) {
