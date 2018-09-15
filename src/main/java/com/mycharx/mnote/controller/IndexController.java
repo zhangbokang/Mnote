@@ -18,6 +18,6 @@ public class IndexController {
      */
     @RequestMapping("")
     public String index() {
-        return "redirect:/schedule/schedulelist.html";
+        return "Hello Word!";
     }
 }
